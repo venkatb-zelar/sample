@@ -1,0 +1,23 @@
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  DOCKER_REGISTRY: "your_registry_url" # Replace with actual registry URL
+
+build:
+  stage: build
+  script:
+    - docker build -t $DOCKER_REGISTRY/your_image_name:latest .
+    
+test:
+  stage: test
+  script:
+    - go test ./...
+    
+deply:
+  stage: deploy
+  script:
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin $DOCKER_REGISTRY
+    - docker push $DOCKER_REGISTRY/your_image_name:latest
